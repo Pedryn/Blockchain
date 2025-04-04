@@ -1,11 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+  <div class="login-container">
+    <h1>LOGIN</h1>
+    <label for="nome">Usuário</label>
+    <input type="text" id="nome" placeholder="Digite seu usuário">
+    <label for="senha">Senha</label>
+    <input type="senha" id="senha" placeholder="Digite sua senha">
+    <button onclick="login()">Entrar</button>
+    <p id="error-message" style="color: red;"></p>
+  </div>
+
+  <script>
+    function login() {
+      const nome = document.getElementById("nome").value;
+      const senha = document.getElementById("senha").value;
+
+      fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nome, senha })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          localStorage.setItem("user", JSON.stringify(data.user));
+          window.location.href = "home.html";
+        } else {
+          document.getElementById("error-message").innerText = "Usuário ou senha inválidos!";
+        }
+      })
+      .catch(error => console.error("Erro:", error));
+    }
+  </script>
 </body>
 </html>

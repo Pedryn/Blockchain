@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="login-container" id="user-info">
+    <h1>Bem-vindo, <span id="user-name"></span>!</h1>
+    <p id="user-role"></p>
+    <button onclick="logout()">Sair</button>
+  </div>
+
+  <script>
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (!user) {
+      window.location.href = "index.html";
+    } else {
+      document.getElementById("user-name").innerText = user.nome;
+      document.getElementById("user-role").innerText = "Fatecoins: " + user.fatecoins;
+    }
+
+    function logout() {
+      localStorage.removeItem("user");
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
