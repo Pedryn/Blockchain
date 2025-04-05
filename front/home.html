@@ -58,32 +58,32 @@
     }
 
     .menu-grid {
-  display: flex;
-  gap: 20px;
-  margin-top: 30px;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
+      display: flex;
+      gap: 20px;
+      margin-top: 30px;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
 
-.menu-card {
-  flex: 1;
-  min-width: 100px;
-  background-color: #e0e0e0;
-  color: #1a1a1a;
-  text-align: center;
-  padding: 30px 20px;
-  border-radius: 15px;
-  text-decoration: none;
-  font-size: 18px;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  margin-bottom: 5%;
-}
+    .menu-card {
+      flex: 1;
+      min-width: 100px;
+      background-color: #e0e0e0;
+      color: #1a1a1a;
+      text-align: center;
+      padding: 30px 20px;
+      border-radius: 15px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      margin-bottom: 5%;
+    }
 
-.menu-card:hover {
-  background-color: #cfcfcf;
-  transform: scale(1.05);
-}
+    .menu-card:hover {
+      background-color: #cfcfcf;
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
@@ -100,7 +100,7 @@
   <!-- CONTEÚDO -->
   <div class="login-container" id="user-info">
     <h1>Bem-vindo, <span id="user-name"></span>!</h1>
-    <p>O que gostaria de fazer?</p>
+    <p id="user-role"></p>
     <div class="menu-grid">
       <a href="compra.html" class="menu-card">Comprar</a>
       <a href="blocos.html" class="menu-card">Blocos</a>
@@ -117,7 +117,7 @@
       window.location.href = "index.html";
     } else {
       document.getElementById("user-name").innerText = user.nome;
-      document.getElementById("user-role").innerText = "Perfil: " + user.role;
+      document.getElementById("user-role").innerText = "O que gostaria de fazer?";
       document.getElementById("user-reais").innerText = "R$ " + parseFloat(user.reais || 0).toFixed(2);
       document.getElementById("user-fatecoins").innerText = "Fatecoins: " + user.fatecoins;
     }
