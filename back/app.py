@@ -1,58 +1,42 @@
-import hashlib
-import time
-import json
-import random
-import uuid
-from flask import Flask, request, jsonify, render_template
-from models import User, Transaction, Block, Blockchain
+# app.py
+from flask import Flask
+from routes.users import users_bp
+from routes.cryptos import cryptos_bp
+from routes.transactions import transactions_bp
+from routes.mining import mining_bp
+import logging
+from apscheduler.schedulers.background import BackgroundScheduler
+from utils.simulate_volatility import simulate_volatility
+from utils.simulate_activity import simulate_user_activity
+from utils.check_blockchain import check_blockchain_integrity
+from init_data import initialize_data
 
 app = Flask(__name__)
 
-# Criando usuários
-users = {user.address: user for user in [User("Alice"), User("Bob"), User("Charlie"), User("Dave"), User("Eve")]} 
-blockchain = Blockchain()
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s] [%(levelname)s] %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 
-@app.route('/')
-def home():
-    return render_template("index.html")
+for logger_name in ['apscheduler', 'apscheduler.scheduler', 'apscheduler.executors.default']:
+    logging.getLogger(logger_name).setLevel(logging.WARNING)
+    logging.getLogger(logger_name).propagate = False
 
-@app.route('/users', methods=['GET'])
-def get_users():
-    return jsonify({addr: {"name": user.name, "balance": user.balance} for addr, user in users.items()})
+initialize_data()
 
-@app.route('/transaction', methods=['POST'])
-def create_transaction():
-    data = request.json
-    sender = data["sender"]
-    receiver = data["receiver"]
-    amount = int(data["amount"])
-    
-    if sender not in users or receiver not in users:
-        return jsonify({"error": "Usuário inválido"}), 400
-    
-    if users[sender].balance < amount:
-        return jsonify({"error": "Saldo insuficiente"}), 400
-    
-    users[sender].balance -= amount
-    users[receiver].balance += amount
-    blockchain.add_transaction(Transaction(sender, receiver, amount))
-    return jsonify({"message": "Transação adicionada"})
-
-@app.route('/mine', methods=['POST'])
-def mine():
-    miner = request.json["miner"]
-    if miner not in users:
-        return jsonify({"error": "Minerador inválido"}), 400
-    blockchain.mine_pending_transactions(miner)
-    return jsonify({"message": "Bloco minerado com sucesso"})
-
-@app.route('/blockchain', methods=['GET'])
-def get_blockchain():
-    return jsonify([{
-        "index": block.index,
-        "hash": block.hash,
-        "transactions": [t.to_dict() for t in block.transactions]
-    } for block in blockchain.chain])
+# Registrar blueprints
+app.register_blueprint(users_bp)
+app.register_blueprint(cryptos_bp)
+app.register_blueprint(transactions_bp)
+app.register_blueprint(mining_bp)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(simulate_volatility, 'interval', minutes=1)
+    scheduler.add_job(simulate_user_activity, 'interval', minutes=0.20)
+    scheduler.add_job(check_blockchain_integrity, 'interval', minutes=1.5)
+
+    scheduler.start()
+
+    app.run(debug=True, use_reloader=False)
