@@ -32,18 +32,3 @@ CREATE TABLE IF NOT EXISTS blocks (
     nonce INT,
     timestamp DOUBLE
 );
-
-
-select * from users;
-
-SELECT u.id, 
-       u.name, 
-       ROUND(SUM(uc.amount * c.price) + u.saldo, 2) AS saldo_total
-FROM users u
-INNER JOIN user_cryptos uc ON u.id = uc.user_id
-INNER JOIN cryptos c ON uc.symbol = c.symbol
-GROUP BY u.id, u.name;
-
-select * from blocks;
-
-drop database Blockchain;
