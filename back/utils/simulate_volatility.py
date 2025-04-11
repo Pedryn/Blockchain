@@ -21,9 +21,9 @@ def simulate_volatility():
 
             if volatility > 0:
                 logging.info(
-                f"[Subiu! :)] {crypto['name']} - {crypto['symbol']} valorizou {volatility*100:.2f}%: R${current_price} -> R${new_price}"
+                f"[Subiu📈] {crypto['name']} - {crypto['symbol']} valorizou {volatility*100:.2f}%: R${current_price} -> R${new_price}"
             )   
             else:
                 logging.info(
-                    f"[Desceu :/] {crypto['name']} - {crypto['symbol']} desvalorizou {volatility*100:.2f}%: R${current_price} -> R${new_price}"
+                    f"[Desceu📉] {crypto['name']} - {crypto['symbol']} desvalorizou {volatility*100:.2f}%: R${current_price} -> R${new_price}"
             )

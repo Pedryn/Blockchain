@@ -46,7 +46,7 @@ def simulate_user_activity():
             max_amount = user_saldo // price
             amount = round(random.uniform(0.1, max_amount), 4)
 
-            logging.info(f"[Compra] {user['name']} comprou {amount} de {crypto['name']} - {symbol}")
+            logging.info(f"[Compra🛒] {user['name']} comprou {amount} de {crypto['name']} - {symbol}")
             buy_crypto(user_id, symbol, amount)
 
         elif action == "sell":
@@ -54,7 +54,7 @@ def simulate_user_activity():
             symbol = crypto['symbol']
             amount = round(random.uniform(0.1, min(2.0, crypto['amount'])), 4)
 
-            logging.info(f"[Venda] {user['name']} vendeu {amount} de {crypto['name']} - {symbol}")
+            logging.info(f"[Venda💰] {user['name']} vendeu {amount} de {crypto['name']} - {symbol}")
             sell_crypto(user_id, symbol, amount)
 
         elif action == "transfer":
@@ -63,7 +63,7 @@ def simulate_user_activity():
             amount = round(random.uniform(0.1, min(2.0, crypto['amount'])), 4)
 
             receiver = random.choice([u for u in users if u['id'] != user_id])
-            logging.info(f"[Transferência] {user['name']} transferiu {amount} de {crypto['name']} - {symbol} para {receiver['name']}")
+            logging.info(f"[Transferência📝] {user['name']} transferiu {amount} de {crypto['name']} - {symbol} para {receiver['name']}")
             transfer_user_to_user(user_id, receiver['id'], symbol, amount)
 
     except Exception as e:
